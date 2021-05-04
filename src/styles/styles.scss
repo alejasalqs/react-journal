@@ -1,0 +1,7 @@
+// En este archivo solo se hace la referencia a los partials de sass
+@import "./base/settings"; // este tinene que ser el primer archivo siempre
+@import "./base/base";
+
+// components
+@import "./components/auth";
+@import "./components/buttons";

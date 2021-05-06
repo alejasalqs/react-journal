@@ -5,7 +5,7 @@ export const NoteScreen = () => {
   return (
     <div className="notes__main-content">
       <NotesAppBar />
-      <div className="notes_content">
+      <div className="notes__content">
         <input
           type="text"
           placeholder="Awesome tittle"

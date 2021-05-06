@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
 }
+
 .notes__app-bar {
   align-items: center;
   background-color: $primary;
@@ -12,7 +13,7 @@
   padding: 10px 20px 10px 20px;
 }
 
-.notes_content {
+.notes__content {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -36,7 +37,7 @@
 }
 
 .notes__textarea {
-  //border: 1px solid black;
+  border: none;
   color: $dark-grey;
   font-size: 20px;
   flex: 1 1 auto;

@@ -1,12 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  login,
-  startGoogleLogin,
-  startLoginEmailPassword,
-} from "../../actions/auth";
+import { startGoogleLogin, startLoginEmailPassword } from "../../actions/auth";
 import { useForm } from "../../hooks/userForm";
+import validator from "validator"; //npm i validator
 
 export const LoginScreen = () => {
   // hook de react-redux, lo que hace es darnos acceso al dispatch de acciones
@@ -20,10 +17,29 @@ export const LoginScreen = () => {
 
   const { email, password } = formValues;
 
+  const isFormValid = () => {
+    if (password.trim().length === 0) {
+      console.log("Password is required");
+      //dispatch(setErrorAction("Name is required."));
+      return false;
+    }
+
+    if (!validator.isEmail(email)) {
+      console.log("Email is not valid");
+      //dispatch(setErrorAction("Email is not valid."));
+      return false;
+    }
+
+    //dispatch(removeErrorAction());
+    return true;
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
-    // mandamos dispatch del login del authReducer
-    dispatch(startLoginEmailPassword(email, password));
+    if (isFormValid()) {
+      // mandamos dispatch del login del authReducer
+      dispatch(startLoginEmailPassword(email, password));
+    }
   };
 
   const handleGoogleLogin = () => {

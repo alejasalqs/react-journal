@@ -4,12 +4,33 @@ import { firebase, googleAuthProvider } from "../firebase/firebase-config";
 
 export const startLoginEmailPassword = (email, password) => {
   // estructura basica de una accion asincrona
-  return (dispatch) => {
+  return async (dispatch) => {
     // Este dispatch se obtiene por parametro gracias a thunk
     // se pueden hacer n dispatch
-    setTimeout(() => {
-      dispatch(login("12345", "Pedro"));
-    }, 3500);
+    const userCredential = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+
+    const { user } = userCredential;
+
+    dispatch(login(user.email, password));
+  };
+};
+
+export const startRegisterWithEmailPasswordName = (email, password, name) => {
+  return async (dispatch) => {
+    const userCredential = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .catch((e) => console.log(e));
+
+    const { user } = userCredential;
+
+    await user.updateProfile({
+      displayName: name,
+    });
+
+    dispatch(login(email, password));
   };
 };
 

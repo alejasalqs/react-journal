@@ -2,11 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "../../hooks/userForm";
 import validator from "validator"; //npm i validator
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { removeErrorAction, setErrorAction } from "../../actions/ui";
+import { startRegisterWithEmailPasswordName } from "../../actions/auth";
 
 export const RegisterScreen = () => {
   const dispatch = useDispatch();
+  // Este hook viene de react-redux y ayuda a obtener una parte del state
+  // Regresa todo el arbol de state que se ve en el devTools
+  const { msgError } = useSelector((state) => state.ui);
+
   const [formValues, handleInputChange] = useForm({
     name: "Alejandro Salguero",
     email: "alejo@hotmail.com",
@@ -45,13 +50,14 @@ export const RegisterScreen = () => {
     e.preventDefault();
     if (isFormValid()) {
       console.log(name, email, password, password2);
+      dispatch(startRegisterWithEmailPasswordName(email, password, name));
     }
   };
   return (
     <>
       <h3 className="auth__tittle">Register</h3>
       <form onSubmit={handleRegister}>
-        <div className="auth__alert-error">Hola Mundo</div>
+        {msgError && <div className="auth__alert-error">{msgError}</div>}
         <input
           className="auth__input"
           type="text"

@@ -1,19 +1,28 @@
 // LAs acciones son simples funciones
 import { types } from "../types/types";
 import { firebase, googleAuthProvider } from "../firebase/firebase-config";
+import { finishLoadingAction, startLoadingAction } from "./ui";
 
 export const startLoginEmailPassword = (email, password) => {
   // estructura basica de una accion asincrona
   return async (dispatch) => {
+    dispatch(startLoadingAction());
     // Este dispatch se obtiene por parametro gracias a thunk
     // se pueden hacer n dispatch
     const userCredential = await firebase
       .auth()
-      .signInWithEmailAndPassword(email, password);
+      .signInWithEmailAndPassword(email, password)
+      .catch((e) => {
+        console.log(e);
+        dispatch(finishLoadingAction());
+      });
 
-    const { user } = userCredential;
+    if (userCredential) {
+      const { user } = userCredential;
+      dispatch(login(user.email, password));
+    }
 
-    dispatch(login(user.email, password));
+    dispatch(finishLoadingAction());
   };
 };
 
@@ -60,3 +69,14 @@ export const login = (uid, displayName) => {
     },
   };
 };
+
+export const startLogOut = () => {
+  return async (dispatch) => {
+    await firebase.auth().signOut();
+    dispatch(logout());
+  };
+};
+
+export const logout = () => ({
+  type: types.logout,
+});

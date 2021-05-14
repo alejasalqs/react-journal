@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { startGoogleLogin, startLoginEmailPassword } from "../../actions/auth";
 import { useForm } from "../../hooks/userForm";
@@ -9,6 +9,8 @@ export const LoginScreen = () => {
   // hook de react-redux, lo que hace es darnos acceso al dispatch de acciones
   // nos permite hacer dispatch de accion en cualquier parte
   const dispatch = useDispatch();
+
+  const { loading } = useSelector((state) => state.ui);
 
   const [formValues, handleInputChange] = useForm({
     email: "alejo@gmail.com",
@@ -66,7 +68,11 @@ export const LoginScreen = () => {
           value={password}
           onChange={handleInputChange}
         />
-        <button className="btn btn-primary btn-block" type="submit">
+        <button
+          className="btn btn-primary btn-block"
+          type="submit"
+          disabled={loading}
+        >
           Login
         </button>
 

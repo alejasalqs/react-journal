@@ -2,6 +2,7 @@
 import { types } from "../types/types";
 import { firebase, googleAuthProvider } from "../firebase/firebase-config";
 import { finishLoadingAction, startLoadingAction } from "./ui";
+import Swal from "sweetalert2";
 
 export const startLoginEmailPassword = (email, password) => {
   // estructura basica de una accion asincrona
@@ -15,6 +16,7 @@ export const startLoginEmailPassword = (email, password) => {
       .catch((e) => {
         console.log(e);
         dispatch(finishLoadingAction());
+        Swal.fire("Error Message", e.message, "error");
       });
 
     if (userCredential) {
@@ -31,7 +33,10 @@ export const startRegisterWithEmailPasswordName = (email, password, name) => {
     const userCredential = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        Swal.fire("Error Message", e.message, "error");
+      });
 
     const { user } = userCredential;
 

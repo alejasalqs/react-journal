@@ -12,6 +12,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../actions/auth";
 import { PrivateRoutes } from "./PrivateRoutes";
 import { PublicRoutes } from "./PublicRoutes";
+import { loadNotes } from "../helpers/loadNotes";
+import { setNote, startLoadingNotes } from "../actions/notes";
 
 export const AppRouter = () => {
   const dispatch = useDispatch();
@@ -20,13 +22,15 @@ export const AppRouter = () => {
   const [checking, setChecking] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
       // Si no esta autenticado regresa null
       if (user?.uid) {
         // hacemos dispatch del login
         dispatch(login(user.uid, user.displayName));
         // Si nos autenticamos cambiamos el state
         setIsLoggedIn(true);
+        // Se cargan las notas del usuario
+        dispatch(startLoadingNotes(user.uid));
       } else {
         setIsLoggedIn(false);
       }

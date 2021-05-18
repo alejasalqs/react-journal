@@ -2,6 +2,7 @@ import { db } from "../firebase/firebase-config";
 import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
 import Swal from "sweetalert2";
+import { fileUpload } from "../helpers/fileUpload";
 
 export const startNewNote = () => {
   // El segundo argumento es una funcion para obtener el state
@@ -48,7 +49,7 @@ export const startSaveNote = (note) => {
 
     // No se pueden guardar undefined en firestore
     if (!note.url) {
-      delete note.url; //react-journal
+      delete note.url;
     }
     // Es necesario eliminar el id
     const noteToFirestore = { ...note };
@@ -74,3 +75,27 @@ export const refreshNote = (id, note) => ({
     },
   },
 });
+
+export const startUploadingFiles = (file) => {
+  return async (dispatch, getState) => {
+    const { active: activeNote } = getState().notes;
+
+    Swal.fire({
+      title: "Uploading...",
+      text: "Please wait...",
+      allowOutsideClick: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    const fileURL = await fileUpload(file);
+    activeNote.url = fileURL;
+
+    console.log(fileURL);
+
+    dispatch(startSaveNote(activeNote));
+
+    Swal.close();
+  };
+};

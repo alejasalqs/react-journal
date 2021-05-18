@@ -99,3 +99,34 @@ export const startUploadingFiles = (file) => {
     Swal.close();
   };
 };
+
+export const startDelete = (id) => {
+  return async (dispatch, getState) => {
+    const uid = getState().auth.uid;
+    Swal.fire({
+      title: "Deleting...",
+      text: "Please wait...",
+      allowOutsideClick: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    await db
+      .doc(`${uid}/journal/notes/${id}`)
+      .delete()
+      .catch((e) => console.log(e));
+
+    dispatch(deleteNote(id));
+
+    Swal.close();
+  };
+};
+
+export const deleteNote = (id) => ({
+  type: types.notesDelete,
+  payload: id,
+});
+
+export const notesLogOut = () => ({
+  type: types.notesLogOutClean,
+});

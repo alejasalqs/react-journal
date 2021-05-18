@@ -3,6 +3,7 @@ import { types } from "../types/types";
 import { firebase, googleAuthProvider } from "../firebase/firebase-config";
 import { finishLoadingAction, startLoadingAction } from "./ui";
 import Swal from "sweetalert2";
+import { notesLogOut } from "./notes";
 
 export const startLoginEmailPassword = (email, password) => {
   // estructura basica de una accion asincrona
@@ -79,6 +80,7 @@ export const startLogOut = () => {
   return async (dispatch) => {
     await firebase.auth().signOut();
     dispatch(logout());
+    dispatch(notesLogOut());
   };
 };
 

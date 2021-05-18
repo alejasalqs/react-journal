@@ -18,6 +18,6 @@ export const PublicRoutes = ({
 };
 
 PublicRoutes.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   component: PropTypes.func.isRequired,
 };

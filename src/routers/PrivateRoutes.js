@@ -23,6 +23,6 @@ export const PrivateRoutes = ({
 };
 
 PrivateRoutes.propTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired,
   component: PropTypes.func.isRequired,
 };
